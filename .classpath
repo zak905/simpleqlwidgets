@@ -4,6 +4,5 @@
 	<classpathentry kind="src" output="test-classes" path="test"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_20"/>
-	<classpathentry kind="lib" path="C:/Users/zakaria/Downloads/advanced-gwt-2.0.9.jar" sourcepath="C:/Users/zakaria/.m2/repository/net/sf/advanced-gwt/advanced-gwt/2.0.9/advanced-gwt-2.0.9-sources.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
