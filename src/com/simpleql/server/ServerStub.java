@@ -1,4 +1,7 @@
-package dateSelector;
+package com.simpleql.server;
+
+import com.simpleql.datamodel.DateElementCounter;
+import com.simpleql.datamodel.DateResolution;
 
 /**
  * Interface between client and server.
