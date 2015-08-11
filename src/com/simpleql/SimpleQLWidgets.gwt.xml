@@ -17,8 +17,7 @@
   <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
-  <!-- Other module inherits                                      -->
-  <inherits name='org.gwt.advanced.Grid'/>
+  
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.simpleql.client.SimpleQLWidgets'/>
 
@@ -26,6 +25,7 @@
   <source path='client'/>
   <source path='treegrid'/>
   <source path='datamodel'/>
+  <source path='table'/>
 
   <!-- allow Super Dev Mode -->
   <add-linker name="xsiframe"/>
