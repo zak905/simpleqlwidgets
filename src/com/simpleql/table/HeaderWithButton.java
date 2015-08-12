@@ -15,8 +15,10 @@ import com.simpleql.datamodel.Period;
 
 public class HeaderWithButton extends AbstractCell<CellTable<Period>> implements SafeHtml {
 	
+	
 	  interface Template extends SafeHtmlTemplates {
-	        @Template("<div style=\"\">{0}</div>")
+		  
+		  @Template("<div style=\"\">{0}</div>")
 	        SafeHtml header(String columnName);
 
 	        @Template("<div style=\"\"><button> {0}</button></div>")
@@ -30,12 +32,14 @@ public class HeaderWithButton extends AbstractCell<CellTable<Period>> implements
 	
 	
 	public HeaderWithButton(String title){
-		super();
+		super("click");
 		this.title = title;
 		button = new Button("Options");
 		titleLabel = new Label(title);
 		if(template == null)
 			 template = GWT.create(Template.class);
+		
+		
 	} 
 
 	@Override
@@ -51,6 +55,13 @@ public class HeaderWithButton extends AbstractCell<CellTable<Period>> implements
 	
 	 @Override
 	    public void onBrowserEvent(Context context,Element parent, CellTable<Period> value, NativeEvent event, ValueUpdater<CellTable<Period>> valueUpdater) {
+		 
+		 super.onBrowserEvent(context, parent, value, event, valueUpdater);
+		 System.out.println("test");
+		 if("click".equals(event.getType())){
+			 
+			 System.out.println("test");
+		 }
 	     
 		 //Implement click events Here
 		 

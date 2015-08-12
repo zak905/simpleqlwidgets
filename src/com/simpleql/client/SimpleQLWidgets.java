@@ -15,6 +15,8 @@ import com.simpleql.datamodel.MyDate;
 import com.simpleql.datamodel.Period;
 import com.simpleql.datamodel.TreeGridModel;
 import com.simpleql.table.HeaderWithButton;
+import com.simpleql.table.HeaderWithButtonBuilder;
+import com.simpleql.table.MyCustomHeaderBuilder;
 import com.simpleql.table.ParentColumn;
 import com.simpleql.treegrid.TreeGrid;
 
@@ -74,6 +76,7 @@ public class SimpleQLWidgets implements EntryPoint {
 		    childTable.addColumn(datesColumn, "Dates");
 		    
 		    childTable.setRowData(periods);
+		    childTable.setHeaderBuilder(new MyCustomHeaderBuilder(childTable, false));
 		    
 		    parentTable.addColumn(parent, new HeaderWithButton("Period"));
 		    
@@ -104,7 +107,7 @@ public class SimpleQLWidgets implements EntryPoint {
 	});*/
 	
 
-	        RootPanel.get("CellTable").add(parentTable);
+	        RootPanel.get("CellTable").add(childTable);
 }
 	
 }
