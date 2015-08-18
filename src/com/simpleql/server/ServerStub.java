@@ -1,7 +1,9 @@
 package com.simpleql.server;
 
-import com.simpleql.datamodel.DateElementCounter;
-import com.simpleql.datamodel.DateResolution;
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.simpleql.shared.datamodel.DateElementCounter;
+import com.simpleql.shared.datamodel.DateResolution;
 
 /**
  * Interface between client and server.
@@ -13,7 +15,8 @@ import com.simpleql.datamodel.DateResolution;
  * @author yossiv
  *
  */
-public interface ServerStub {
+@RemoteServiceRelativePath("serverstub")
+public interface ServerStub extends RemoteService {
 
 	/**
 	 * Returns values to be displayed at each level.

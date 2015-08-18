@@ -5,16 +5,16 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
 
-  <!-- Servlets 
+  <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.simpleql.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>ServerStubServlet</servlet-name>
+    <servlet-class>com.simpleql.server.impl.ServerStubImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/simpleqlwidgets/greet</url-pattern>
-  </servlet-mapping>-->
+    <servlet-name>ServerStubServlet</servlet-name>
+    <url-pattern>/simpleqlwidgets/serverstub</url-pattern>
+  </servlet-mapping>
   
   
   <!-- Default page to serve -->

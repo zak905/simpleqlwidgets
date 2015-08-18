@@ -5,42 +5,34 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.simpleql.datamodel.MyDate;
-import com.simpleql.datamodel.Period;
-import com.simpleql.datamodel.TreeGridModel;
-import com.simpleql.table.HeaderWithButton;
-import com.simpleql.table.HeaderWithButtonBuilder;
-import com.simpleql.table.MyCustomHeaderBuilder;
-import com.simpleql.table.ParentColumn;
-import com.simpleql.treegrid.TreeGrid;
+import com.simpleql.client.table.HeaderWithButton;
+import com.simpleql.client.table.MyCustomHeaderBuilder;
+import com.simpleql.client.table.ParentColumn;
+import com.simpleql.client.treegrid.MyTree;
+import com.simpleql.client.treegrid.TreeGrid;
+import com.simpleql.shared.datamodel.MyDate;
+import com.simpleql.shared.datamodel.Period;
+
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class SimpleQLWidgets implements EntryPoint {
 	
-	Object[][] dates = new Object[][] {
-	        new Object[]{new MyDate("2006","04","05","15")},
-	        new Object[]{new MyDate("2006","03","18",null)},
-	        new Object[]{new MyDate("2007","06","20","14")},
-	        new Object[]{new MyDate("2007","06","20","17")},
-	        new Object[]{new MyDate("2007","08","25","03")}
-	    };
+
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 		
-		    //TreeGridModel model = new TreeGridModel(dates);
-		    //final TreeGrid grid = new TreeGrid(model);
-		    
-		    final CellTable<CellTable<Period>> parentTable = new CellTable<CellTable<Period>>();
+		   // MyTreeViewModel model = new MyTreeViewModel(dates);
+		   final MyTree tree = new MyTree("");
+		   tree.InitializeEvents();
+		   
+
 		    final CellTable<Period> childTable = new CellTable<Period>();
 		    
 		    List<Period> periods = new ArrayList<Period>();
@@ -64,12 +56,7 @@ public class SimpleQLWidgets implements EntryPoint {
 				}
 		    };
 		    
-		    ParentColumn<CellTable<Period>> parent = new ParentColumn<CellTable<Period>>(){
-				@Override
-				public CellTable<Period> getValue(CellTable<Period> object) {
-					return object;
-				}
-		    };
+
 		   
 		    
 		    childTable.addColumn(commentsColumn, "Comments");
@@ -78,9 +65,7 @@ public class SimpleQLWidgets implements EntryPoint {
 		    childTable.setRowData(periods);
 		    childTable.setHeaderBuilder(new MyCustomHeaderBuilder(childTable, false));
 		    
-		    parentTable.addColumn(parent, new HeaderWithButton("Period"));
-		    
-		    parentTable.setRowData(Arrays.asList(childTable));
+	
 		    
 		    
 		    /// Unused code for now
@@ -106,8 +91,8 @@ public class SimpleQLWidgets implements EntryPoint {
 	        
 	});*/
 	
-
-	        RootPanel.get("CellTable").add(childTable);
+		    RootPanel.get("TreeGrid").add(tree.asWidget());
+	        //RootPanel.get("CellTable").add(childTable);
 }
 	
 }

@@ -1,0 +1,2 @@
+serviceClass: com.simpleql.server.ServerStub
+path: 18C63E5685AB37448C53D0B179A7D982.gwt.rpc
