@@ -1,7 +1,6 @@
 package com.simpleql.shared.datamodel;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -141,7 +140,7 @@ public class MyTreeViewModel {
 							CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
 							if(checkBox2.getText().equals(month3)){
 								for(int k = 0; k < monthNode.getChildCount(); k++){
-									TreeItem dayNode =  monthNode.getChild(j);
+									TreeItem dayNode =  monthNode.getChild(k);
 									if(dayNode.getWidget() != null){
 									HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
 									CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
@@ -224,7 +223,7 @@ public class MyTreeViewModel {
 							CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
 							if(checkBox2.getText().equals(month2)){
 								for(int k = 0; k < monthNode.getChildCount(); k++){
-									TreeItem dayNode =  monthNode.getChild(j);
+									TreeItem dayNode =  monthNode.getChild(k);
 									if(dayNode.getWidget() != null){
 										HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
 										CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
@@ -267,13 +266,13 @@ public class MyTreeViewModel {
 						CheckBox checkBox2 = (CheckBox) container2.getWidget(0);		
 							if(checkBox2.getText().equals(month3)){
 								for(int k = 0; k < monthNode.getChildCount(); k++){
-									TreeItem dayNode =  yearNode.getChild(j);
+									TreeItem dayNode =  yearNode.getChild(k);
 										if(dayNode.getWidget() != null){
 										HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
 										CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
 										if(checkBox3.getText().equals(day)){
 											for(int l = 0; l < dayNode.getChildCount(); l++){
-												TreeItem hourNode =  yearNode.getChild(j);
+												TreeItem hourNode =  yearNode.getChild(l);
 												if(dayNode.getWidget() != null){
 												HorizontalPanel container4 = (HorizontalPanel) dayNode.getWidget();
 												CheckBox checkBox4 = (CheckBox) container4.getWidget(0);
@@ -350,7 +349,7 @@ public class MyTreeViewModel {
 					CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
 					if(checkBox2.getText().equals(month2)){
 						for(int k = 0; k < monthNode.getChildCount(); k++){
-							TreeItem dayNode =  monthNode.getChild(j);
+							TreeItem dayNode =  monthNode.getChild(k);
 							HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
 							CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
 							if(checkBox3.getText().equals(day2)){
@@ -386,12 +385,12 @@ public class MyTreeViewModel {
 						CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
 						if(checkBox2.getText().equals(month3)){
 							for(int k = 0; k < monthNode.getChildCount(); k++){
-								TreeItem dayNode =  yearNode.getChild(j);
+								TreeItem dayNode =  yearNode.getChild(k);
 								HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
 								CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
 								if(checkBox3.getText().equals(day)){
 									for(int l = 0; l < dayNode.getChildCount(); l++){
-										TreeItem hourNode =  yearNode.getChild(j);
+										TreeItem hourNode =  yearNode.getChild(l);
 										HorizontalPanel container4 = (HorizontalPanel) dayNode.getWidget();
 										CheckBox checkBox4 = (CheckBox) container4.getWidget(0);
 										if(checkBox4.getText().equals(hour)){

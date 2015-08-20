@@ -5,14 +5,28 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NodeList;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.query.client.Function;
+import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.simpleql.client.table.HeaderWithButton;
+import com.simpleql.client.table.MyButton;
 import com.simpleql.client.table.MyCustomHeaderBuilder;
 import com.simpleql.client.table.ParentColumn;
 import com.simpleql.client.treegrid.MyTree;
 import com.simpleql.client.treegrid.TreeGrid;
+import com.simpleql.shared.datamodel.DateRangeElement;
 import com.simpleql.shared.datamodel.MyDate;
 import com.simpleql.shared.datamodel.Period;
 
@@ -69,30 +83,37 @@ public class SimpleQLWidgets implements EntryPoint {
 		    
 		    
 		    /// Unused code for now
-		  /*  Button button = new Button("Get Selected Values");
+		   Button button = new Button("Get Selected Values");
 	        
-	        RootPanel.get("TreeGrid").add(grid);
-	        RootPanel.get("TreeGrid").add(button);
+	        
+	        
 	        
 	        
 	        button.addClickHandler(new ClickHandler(){
 				@Override
 				public void onClick(ClickEvent event) {
 					// TODO Auto-generated method stub
-					List<MyDate> selectedDates = grid.getSelectedDates();
+					DateRangeElement[] selectedDates = tree.getSelectedDates();
 					StringBuffer buffer = new StringBuffer();
-					for(MyDate date: selectedDates){
-						buffer.append(date.toString());
+					for(DateRangeElement date: selectedDates){
+						buffer.append("From: " + date.getFrom() + " to: " + date.getTo());
 						buffer.append("<br>");
 					}
 					RootPanel.get("Data").getElement().setInnerHTML(buffer.toString());
 				}
 				
 	        
-	});*/
+	});
+		    
+		 
 	
 		    RootPanel.get("TreeGrid").add(tree.asWidget());
-	        //RootPanel.get("CellTable").add(childTable);
+		    RootPanel.get("TreeGrid").add(button);
+	        RootPanel.get("CellTable").add(childTable);
+	        
+
+	        
+	
 }
 	
 }

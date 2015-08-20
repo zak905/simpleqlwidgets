@@ -1,6 +1,7 @@
 package com.simpleql.client.treegrid;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.shared.GWT;
@@ -47,7 +48,7 @@ public class MyTree extends DateRangeSelector {
 				if(!currentItem.equals(model.getRoot())){
 						HorizontalPanel container = (HorizontalPanel) currentItem.getWidget();
 					    CheckBox checkbox = (CheckBox) container.getWidget(0);
-					    String nodeValue = currentItem.getElement().getId();
+					    final String nodeValue = currentItem.getElement().getId();
 					    String checkBoxClass = checkbox.getElement().getClassName();
 					    String[] split = checkBoxClass.split(" ");
 					    final String resolutionClass = split[1];
@@ -81,6 +82,7 @@ public class MyTree extends DateRangeSelector {
 								    }else {
 								    	resolution = DateResolution.Hour;
 								    }
+								    
 								for(int i = 0; i < result.length; i++){
 									model.insert(result[i], resolution);
 								}
@@ -122,69 +124,247 @@ public class MyTree extends DateRangeSelector {
 	
 	
 
-    // To be finishied
+    
 	@Override
 	public DateRangeElement[] getSelectedDates() {
 		List<DateRangeElement> list = new ArrayList<DateRangeElement>();
 		
-		for(int i = 0; i < model.getRoot().getChildCount(); i++){
-			TreeItem yearNode = model.getRoot().getChild(i);
+		if(isRangeContinuous(model.getRoot())){
+			
+			TreeItem firstItem = getFirstElementOfTheRange(model.getRoot());
+			TreeItem lastItem = getLastElementOfTheRange(model.getRoot());
+			
+			if(firstItem != null && lastItem != null){
+				
+				String begining = firstItem.getElement().getId();
+
+				String end = lastItem.getElement().getId();
+
+				
+			DateRangeElement rangeElement = new DateRangeElement(DateResolution.Year, begining, end);
+			
+			list.add(rangeElement);
+		
+			}
+			
+			
+		}else{
+		
+				for(int i = 0; i < model.getRoot().getChildCount(); i++){
+					TreeItem yearNode = model.getRoot().getChild(i);
+					//if not dummy element
+					if(yearNode.getWidget() != null){
+						HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
+						CheckBox checkBox = (CheckBox) container.getWidget(0);
+						if(checkBox.getValue()){
+							String year = yearNode.getElement().getId();
+							DateRangeElement rangeElement = new DateRangeElement(DateResolution.Year, year, year);
+							list.add(rangeElement);
+							
+						}else {
+							DateRangeElement[] selectedMonths = getSelectedDatesForMonths(yearNode);
+							List<DateRangeElement> monthsAsList = Arrays.asList(selectedMonths);
+							list.addAll(monthsAsList);
+							
+						}
+						
+						
+					}
+				}
+		
+		}
+		return list.toArray(new DateRangeElement[list.size()]);
+	}
+	
+	public DateRangeElement[] getSelectedDatesForMonths(TreeItem subTreeRoot) {
+		List<DateRangeElement> list = new ArrayList<DateRangeElement>();
+		
+		
+		 if(isRangeContinuous(subTreeRoot)){
+				
+				TreeItem firstItem = getFirstElementOfTheRange(subTreeRoot);
+				TreeItem lastItem = getLastElementOfTheRange(subTreeRoot);
+				
+				
+				if(firstItem != null && lastItem != null){
+					String begining = firstItem.getElement().getId();
+
+					String end = lastItem.getElement().getId();
+
+					
+				DateRangeElement rangeElement = new DateRangeElement(DateResolution.Month, begining, end);
+				
+				list.add(rangeElement);
+			
+				}
+				
+				
+			}else{
+		
+				for(int i = 0; i < subTreeRoot.getChildCount(); i++){
+					TreeItem montNode = subTreeRoot.getChild(i);
+					
+					//if not dummy element
+					if(montNode.getWidget() != null){
+						HorizontalPanel container = (HorizontalPanel) montNode.getWidget();
+						CheckBox checkBox = (CheckBox) container.getWidget(0);
+						if(checkBox.getValue()){
+							String month = montNode.getElement().getId();
+							
+							DateRangeElement rangeElement = new DateRangeElement(DateResolution.Month, month, month);
+							list.add(rangeElement);
+							
+						}else {
+							DateRangeElement[] selectedDays = getSelectedDatesForDays(montNode);
+							List<DateRangeElement> daysAsList = Arrays.asList(selectedDays);
+							list.addAll(daysAsList);
+							
+						}
+						
+						
+					}
+				}
+		
+	     }
+		return list.toArray(new DateRangeElement[list.size()]);
+	}
+	
+	public DateRangeElement[] getSelectedDatesForDays(TreeItem subTreeRoot) {
+		List<DateRangeElement> list = new ArrayList<DateRangeElement>();
+		
+		
+         if(isRangeContinuous(subTreeRoot)){
+			
+			TreeItem firstItem = getFirstElementOfTheRange(subTreeRoot);
+			TreeItem lastItem = getLastElementOfTheRange(subTreeRoot);
+			
+			
+			if(firstItem != null && lastItem != null){
+				String begining = firstItem.getElement().getId();
+
+				String end = lastItem.getElement().getId();
+
+				
+			DateRangeElement rangeElement = new DateRangeElement(DateResolution.Day, begining, end);
+			
+			list.add(rangeElement);
+			}
+			
+			
+		}else{
+		for(int i = 0; i < subTreeRoot.getChildCount(); i++){
+			TreeItem dayNode = subTreeRoot.getChild(i);
 			//if not dummy element
-			if(yearNode.getWidget() != null){
-				HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
+			if(dayNode.getWidget() != null){
+				HorizontalPanel container = (HorizontalPanel) dayNode.getWidget();
 				CheckBox checkBox = (CheckBox) container.getWidget(0);
 				if(checkBox.getValue()){
-					String year = yearNode.getElement().getId();
+					String dayResolution = dayNode.getElement().getId();
 					
-					DateRangeElement range = new DateRangeElement(DateResolution.Year, year, year);
-					
+					DateRangeElement rangeElement = new DateRangeElement(DateResolution.Day, dayResolution, dayResolution);
+					list.add(rangeElement);
 				}else {
-					
-					
-					
+					DateRangeElement[] selectedHours = getSelectedDatesForHours(dayNode);
+					List<DateRangeElement> hoursAsList = Arrays.asList(selectedHours);
+					list.addAll(hoursAsList);
 				}
 				
 				
 			}
 		}
 		
-		
+		}
 		return list.toArray(new DateRangeElement[list.size()]);
 	}
 	
-	public DateRangeElement[] getSelectedDates(TreeItem subTreeRoot) {
+	public DateRangeElement[] getSelectedDatesForHours(TreeItem subTreeRoot) {
 		List<DateRangeElement> list = new ArrayList<DateRangeElement>();
+		if(isRangeContinuous(subTreeRoot)){
+			
+			TreeItem firstItem = getFirstElementOfTheRange(subTreeRoot);
+			TreeItem lastItem = getLastElementOfTheRange(subTreeRoot);
+			
+			
+			if(firstItem != null && lastItem != null){
+				String begining = firstItem.getElement().getId();
+				String end = lastItem.getElement().getId();
+			    DateRangeElement rangeElement = new DateRangeElement(DateResolution.Hour, begining, end);
+			
+			list.add(rangeElement);
+		
+			}
+			
+			
+		}else{
+				for(int i = 0; i < subTreeRoot.getChildCount(); i++){
+					TreeItem node = subTreeRoot.getChild(i);
+					//if not dummy element
+					if(node.getWidget() != null){
+						HorizontalPanel container = (HorizontalPanel) node.getWidget();
+						CheckBox checkBox = (CheckBox) container.getWidget(0);
+						if(checkBox.getValue()){
+							String hourResolution = node.getElement().getId();
+							DateRangeElement rangeElement = new DateRangeElement(DateResolution.Hour, hourResolution, hourResolution);
+							list.add(rangeElement);
+						}
+					}
+				}
+		
+		}
+		return list.toArray(new DateRangeElement[list.size()]);
+	}
+	
+	
+	
+	private boolean isRangeContinuous(TreeItem subTreeRoot){
+		
+		boolean flag = false;
 		
 		for(int i = 0; i < subTreeRoot.getChildCount(); i++){
 			TreeItem node = subTreeRoot.getChild(i);
-			//if not dummy element
+			
 			if(node.getWidget() != null){
 				HorizontalPanel container = (HorizontalPanel) node.getWidget();
 				CheckBox checkBox = (CheckBox) container.getWidget(0);
 				if(checkBox.getValue()){
-					String year = node.getElement().getId();
-					
-					DateRangeElement range = new DateRangeElement(DateResolution.Year, year, year);
-					
-				}else {
-					
-					
-					
+					flag = true;
+				}else{
+					flag = false;
+					break;
 				}
-				
-				
-			}
+		    }
 		}
 		
+		return flag;
+	}
+	
+	private TreeItem getFirstElementOfTheRange(TreeItem subTreeRoot){
+		for(int i = 0; i < subTreeRoot.getChildCount(); i++){
+			TreeItem node = subTreeRoot.getChild(i);
+			//return first non null element
+			if(node.getWidget() != null){
+				return node;
+		    }
+		}
+		return null;
 		
-		return list.toArray(new DateRangeElement[list.size()]);
+	}
+	
+	private TreeItem getLastElementOfTheRange(TreeItem subTreeRoot){
+		for(int i = subTreeRoot.getChildCount() - 1; i > 0 ; i++){
+			TreeItem node = subTreeRoot.getChild(i);
+			//return first to last non null element
+			if(node.getWidget() != null){
+				return node;
+		    }
+		}
+		return null;
 	}
 	
 	
 	@Override
 	public Widget asWidget(){
 		return tree;
-		
 	}
 
 }

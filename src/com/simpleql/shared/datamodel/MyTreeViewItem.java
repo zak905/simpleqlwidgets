@@ -58,7 +58,6 @@ public class MyTreeViewItem implements IsTreeItem {
 		case Month:
 			
 			String[] monthSplit = value.split("-");
-			System.out.println(value);
 			
 			String month = monthSplit[1];
 			

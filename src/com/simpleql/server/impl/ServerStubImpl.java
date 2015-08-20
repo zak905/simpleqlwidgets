@@ -20,20 +20,33 @@ public class ServerStubImpl extends RemoteServiceServlet implements ServerStub {
 	        new Object[]{new DateElementCounter("2010", 10), DateResolution.Year},
 	        new Object[]{new DateElementCounter("2011", 25), DateResolution.Year},
 	        new Object[]{new DateElementCounter("2010-05", 22),DateResolution.Month },
+	        new Object[]{new DateElementCounter("2010-08", 22),DateResolution.Month },
+	        new Object[]{new DateElementCounter("2010-10", 22),DateResolution.Month },
+	        new Object[]{new DateElementCounter("2010-12", 22),DateResolution.Month },
 	        new Object[]{new DateElementCounter("2011-11", 14), DateResolution.Month},
 	        new Object[]{new DateElementCounter("2010-05-10", 8), DateResolution.Day},
+	        new Object[]{new DateElementCounter("2010-08-24", 8), DateResolution.Day},
+	        new Object[]{new DateElementCounter("2010-08-28", 8), DateResolution.Day},
 	        new Object[]{new DateElementCounter("2010-05-10 12", 8), DateResolution.Hour},
 	        new Object[]{new DateElementCounter("2010-05-10 17", 8), DateResolution.Hour},
+	        new Object[]{new DateElementCounter("2010-08-24 08", 8), DateResolution.Hour},
+	        new Object[]{new DateElementCounter("2010-08-24 15", 8), DateResolution.Hour},
+	        new Object[]{new DateElementCounter("2010-08-24 17", 8), DateResolution.Hour},
 	        new Object[]{new DateElementCounter("2011-11-13", 5), DateResolution.Day}
 	    };
 	
+	
+	
 	  final MyTreeDataModel model = new MyTreeDataModel(dates);
+	  
 
 
 	@Override
 	public DateElementCounter[] getNextLevelValues(String token,
 			DateResolution type, String value) {
-
+		
+		//printModel(model.getRoot());
+		
 		
 		List<DateElementCounter> list = new ArrayList<DateElementCounter>();
 		
@@ -64,9 +77,12 @@ public class ServerStubImpl extends RemoteServiceServlet implements ServerStub {
 			MyTreeNode subTreeRoot = model.findByValue(value, resolution);
 			
 			
+			
 			//if found & if data is already sent, no need to resent it again, it will be duplicated
 			if(subTreeRoot != null && !subTreeRoot.isVisited() ){
 				subTreeRoot.setVisited(true);
+				
+				
 				for(int i = 0; i < subTreeRoot.getChildCount(); i++){
 					MyTreeNode child = subTreeRoot.getChild(i);
 
@@ -82,6 +98,9 @@ public class ServerStubImpl extends RemoteServiceServlet implements ServerStub {
 		
 		return list.toArray(new DateElementCounter[list.size()]);
 	}
+	
+	
+
 
 
 

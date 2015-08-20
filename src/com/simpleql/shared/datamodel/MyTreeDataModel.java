@@ -1,8 +1,5 @@
 package com.simpleql.shared.datamodel;
 
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.TreeItem;
 
 public class MyTreeDataModel {
 	
@@ -96,7 +93,8 @@ public void insert(DateElementCounter element, DateResolution resolution){
 			
 							if(monthNode.getNodeValue().equals(month3)){
 								for(int k = 0; k < monthNode.getChildCount(); k++){
-									MyTreeNode dayNode =  monthNode.getChild(j);
+									MyTreeNode dayNode =  monthNode.getChild(k);
+
 									if(dayNode.getNodeValue().equals(day)){
 										dayNode.addItem(new MyTreeNode(element, resolution));
 										break;
@@ -157,7 +155,7 @@ public MyTreeNode findByValue(String value, DateResolution resolution){
 
 				if(monthNode.getNodeValue().equals(month2)){
 					for(int k = 0; k < monthNode.getChildCount(); k++){
-						MyTreeNode dayNode =  monthNode.getChild(j);
+						MyTreeNode dayNode =  monthNode.getChild(k);
 						if(dayNode.getNodeValue().equals(day2)){
 							return dayNode;
 						}
@@ -187,10 +185,10 @@ public MyTreeNode findByValue(String value, DateResolution resolution){
 					MyTreeNode monthNode =  yearNode.getChild(j);
 					if(monthNode.getNodeValue().equals(month3)){
 						for(int k = 0; k < monthNode.getChildCount(); k++){
-							MyTreeNode dayNode =  monthNode.getChild(j);
+							MyTreeNode dayNode =  monthNode.getChild(k);
 							if(dayNode.getNodeValue().equals(day)){
 								for(int l = 0; l < dayNode.getChildCount(); l++){
-									MyTreeNode hourNode =  yearNode.getChild(j);
+									MyTreeNode hourNode =  yearNode.getChild(l);
 									if(hourNode.getNodeValue().equals(hour)){
 										return hourNode;
 									}
