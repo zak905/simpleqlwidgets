@@ -1,5 +1,8 @@
 package com.simpleql.shared.datamodel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -33,14 +36,17 @@ public class MyTreeViewItem implements IsTreeItem {
 	MyTreeViewModel model;
 	
 	TreeItem parent;
+	
+	
 
-	public MyTreeViewItem(DateElementCounter data, DateResolution resolution, MyTreeViewModel model, TreeItem parent){
+	public MyTreeViewItem(DateElementCounter data, DateResolution resolution, MyTreeViewModel model, TreeItem parent, boolean isChecked){
 		this.data = data;
-		this.resolution = resolution;
+		this.resolution = resolution; 
 		this.model = model;
 		this.parent = parent;
 		
 		checkBox = new CheckBox();
+		checkBox.setValue(isChecked);
 		AddSelectEvent();
 		counter = new Label("(" + String.valueOf(data.getCount()) +")");
 		counter.getElement().getStyle().setMarginLeft(20, Unit.PX);
@@ -61,7 +67,8 @@ public class MyTreeViewItem implements IsTreeItem {
 			
 			String month = monthSplit[1];
 			
-			nodeValue = month;
+			int monthIndex = Integer.parseInt(month);
+			nodeValue = getMonthName(monthIndex);
 			checkBox.getElement().addClassName("month");
 		  break;
 		case Day:
@@ -138,10 +145,6 @@ public class MyTreeViewItem implements IsTreeItem {
 				if(selectedItem != null){
 				selectSubTree(selectedItem, selectedCheckbox.getValue());
 				}
-				
-
-				
-				
 			}
 		});
 		
@@ -174,57 +177,237 @@ public class MyTreeViewItem implements IsTreeItem {
 	private void selectSubTree(TreeItem item, boolean value){
 		//if this is not a dummy element
 		if(item.getWidget() != null){
+			
+			//apply selection
 			HorizontalPanel container = (HorizontalPanel) item.getWidget();
 			this.selected = value;
 			CheckBox checkBox = (CheckBox) container.getWidget(0);
 			checkBox.setValue(value);
 			
-			// To be Tested
-			/*if(AllSiblingsHasSameValue(item, value)){
-				if(parent.getWidget() != null){
-					
-				HorizontalPanel parentContainer = (HorizontalPanel) parent.getWidget();
-				CheckBox parentCheckBox = (CheckBox) parentContainer.getWidget(0);
-				System.out.println(parentCheckBox.getText());
-				parentCheckBox.setValue(value);
-				}
+		
+			// Take care of parents 
+		    	if(CheckIfParentisToBeSelected(parent, item)){
+		    		setValueOfParent(parent, value);
+		    	}
+		    
 			
+		
 			
-			
-		}*/
-			
+			//Take Care of Children nodes
 		if(item.getChildCount() > 0){
 			for(int i = 0 ; i < item.getChildCount(); i++){
 				selectSubTree(item.getChild(i), value);
 			}
 		}
+		
 			
 		 }
 		
 	}
-
-
-private boolean AllSiblingsHasSameValue(TreeItem item, boolean value){
 	
+private void setValueOfParent(TreeItem parent, boolean value){
+
+	
+	if(parent.getWidget() != null){
+		
+		HorizontalPanel parentContainer = (HorizontalPanel) parent.getWidget();
+		CheckBox parentCheckBox = (CheckBox) parentContainer.getWidget(0);
+		parentCheckBox.setValue(value);
+		 String checkBoxClass = parentCheckBox.getElement().getClassName();
+		    String[] split = checkBoxClass.split(" ");
+		    String resolutionClass = split[1];
+		    String nodeData = parent.getElement().getId();
+
+		    //Go one level up
+		    DateResolution resolution;
+		    if(resolutionClass.equals("month")){
+		    	resolution = DateResolution.Year;
+		    	String[] yearSplit = nodeData.split("-");
+		    	nodeData = yearSplit[0];
+		    }else if (resolutionClass.equals("day")){
+		    	resolution = DateResolution.Month;
+		    }else if (resolutionClass.equals("hour")){
+		    	resolution = DateResolution.Day;
+		    } else{
+		    	return;
+		    }
+		//parents parent
+		    TreeItem grandParent = model.findByValue(nodeData, resolution);
+		
+		 
+		  if(grandParent != null){
+			  if(CheckIfParentisToBeSelected(grandParent, item)){
+					setValueOfParent(grandParent, value);
+				}
+		}
+	}
+	
+}
+
+
+private boolean AllSiblingsHasSameValue(TreeItem parent, boolean value){
 	boolean flag = false;
 	
+	if(parent == null)
+		return false;
+   
 	for(int i = 0; i < parent.getChildCount(); i++){
-		if(!parent.getChild(i).equals(item)){
 			if(parent.getChild(i).getWidget() != null){
-			HorizontalPanel container = (HorizontalPanel) parent.getChild(i).getWidget();
-			CheckBox checkBox = (CheckBox) container.getWidget(0);
-			if(checkBox.getValue().equals(value))
-				flag = true;
-			else
-				flag = false;
+				HorizontalPanel container = (HorizontalPanel) parent.getChild(i).getWidget();
+				CheckBox checkBox = (CheckBox) container.getWidget(0);
 				
-			}
-			
+				if(checkBox.getValue().equals(value)){
+					flag = true;
+				}else{
+					flag = false;
+					break;
+				}
+		}
+	}
+	return flag;
+}
+
+private boolean AllSiblingsHasDifferentValue(TreeItem parent, TreeItem child){
+	boolean flag = false;
+	
+	boolean flag2 = false;
+	
+	if(parent == null)
+		return false;
+   
+	for(int i = 0; i < parent.getChildCount(); i++){
+			if(parent.getChild(i).getWidget() != null && child.getWidget() != null){
+				HorizontalPanel childContainer = (HorizontalPanel) child.getWidget();
+				CheckBox childCheckBox = (CheckBox) childContainer.getWidget(0);
+				
+				HorizontalPanel parentContainer = (HorizontalPanel) parent.getWidget();
+				CheckBox parentCheckBox = (CheckBox) parentContainer.getWidget(0);
+				
+				if(childCheckBox.getValue() == parentCheckBox.getValue()){
+					flag2 = true;
+				}
+				
+				if(!parent.getChild(i).getElement().getId().equals(child.getElement().getId())){
+					HorizontalPanel container = (HorizontalPanel) parent.getChild(i).getWidget();
+					CheckBox checkBox = (CheckBox) container.getWidget(0);
+					System.out.println("checkBox 1" + childCheckBox.getValue() + " " + childCheckBox.getText() + "checkBox 2 " + checkBox.getValue() + " " + checkBox.getText() + " flag2 " + flag2);
+					/*if(flag2){
+							if(checkBox.getValue() != parentCheckBox.getValue()){
+								    flag = false;
+								    break;
+							}
+							else{
+								flag = true;
+							}
+							
+					}*/if(!flag2){
+						if(checkBox.getValue() != parentCheckBox.getValue()){
+						    flag = true && flag;
+						    System.out.println("case 1");
+					    }
+					else{
+						if(checkBox.getValue() != childCheckBox.getValue()){
+							System.out.println("case 2 - a");
+						   flag = flag || false;
+						}else{
+							System.out.println("case 2 - b");
+							flag = true && flag;
+						}
+					}
+						
+					}
+				}
+		}
+	}
+	
+
+	
+		return flag;	
+}
+
+private boolean CheckIfParentisToBeSelected(TreeItem parent, TreeItem child){
+	boolean leftHandSide = false;
+	
+	boolean rightHandSideUsingOr = false;
+	
+	boolean rightHandSideUsingAnd = false;
+	
+	if(parent == null)
+		return false;
+	
+	HorizontalPanel parentContainer = (HorizontalPanel) parent.getWidget();
+	CheckBox parentCheckBox = (CheckBox) parentContainer.getWidget(0);
+	leftHandSide = parentCheckBox.getValue();
+	
+	HorizontalPanel childContainer = (HorizontalPanel) child.getWidget();
+	CheckBox childCheckBox = (CheckBox) childContainer.getWidget(0);
+	rightHandSideUsingOr = childCheckBox.getValue();
+	
+	for(int i = 0; i < parent.getChildCount(); i++){
+			if(parent.getChild(i).getWidget() != null){
+					HorizontalPanel container = (HorizontalPanel) parent.getChild(i).getWidget();
+					CheckBox checkBox = (CheckBox) container.getWidget(0);
+					
+					
+						rightHandSideUsingOr = rightHandSideUsingOr || checkBox.getValue();
+						
+					
+						rightHandSideUsingAnd = rightHandSideUsingAnd && checkBox.getValue();
+					
+				
 		}
 	}
 	
 	
-	return flag;
+		if(rightHandSideUsingOr != rightHandSideUsingAnd){
+			if(leftHandSide){
+				if(rightHandSideUsingOr)
+				   return false;
+				else
+					return true;
+			}else {
+				if(!rightHandSideUsingOr)
+					  return false;
+				else
+					return true;
+			}
+			
+			
+		}else{
+			if(leftHandSide == rightHandSideUsingOr)
+			   return false;
+			else
+				return true;
+		}
+
+}
+
+	
+	
+	
+
+
+public static String getMonthName(int month){
+    String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    return monthNames[month - 1];
+}
+
+public static int getMonthIndex(String monthName){
+	Map<String, Integer> months = new HashMap<String, Integer>();
+	months.put("January", 1);
+	months.put("February", 2);
+	months.put("March", 3);
+	months.put("April", 4);
+	months.put("May", 5);
+	months.put("June", 6);
+	months.put("July", 7);
+	months.put("August", 8);
+	months.put("September", 9);
+	months.put("October", 10);
+	months.put("November", 11);
+	months.put("December", 12);
+    
+    return months.get(monthName);
 }
 
 }
