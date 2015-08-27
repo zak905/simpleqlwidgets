@@ -44,8 +44,6 @@ public class MyTreeViewModel {
 		
 		switch(resolution){
 		case Year:
-			
-			//root.addItem(new MyTreeViewItem(element, resolution));
 			MyTreeViewItem temp = new MyTreeViewItem(element, resolution, this, null, isChecked);
 			
 			//Dummy Empty element for displaying node expand button in case there is no children
@@ -53,7 +51,6 @@ public class MyTreeViewModel {
 			temp.getTreeItem().addItem(dummy.getTreeItem());
 			
 			root.addItem(temp.getTreeItem());
-			//root.addTextItem("Test");
 			break;
 		case Month:
 			
@@ -67,10 +64,8 @@ public class MyTreeViewModel {
 				
 				
 			  //if this is not a dummy element
-				 if(yearNode.getWidget() != null){
-					 HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-					CheckBox checkBox = (CheckBox) container.getWidget(0);
-					if(checkBox.getText().equals(year)){
+				 if(IfNodeIsNotDummy(yearNode)){
+					if(getCheckBoxValueFromTreeItem(yearNode).equals(year)){
 						MyTreeViewItem newNode = new MyTreeViewItem(element, resolution, this, yearNode, isChecked);
 						//Add dummy element
 						newNode.getTreeItem().addItem(new TreeItem());
@@ -91,18 +86,15 @@ public class MyTreeViewModel {
 			for(int i = 0; i < root.getChildCount(); i++){
 				TreeItem yearNode =  root.getChild(i);
 				//If this is not a dummy element
-				 if(yearNode.getWidget() != null){
-					HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-					CheckBox checkBox = (CheckBox) container.getWidget(0);
-					if(checkBox.getText().equals(year2)){
+				 if(IfNodeIsNotDummy(yearNode)){
+					if(getCheckBoxValueFromTreeItem(yearNode).equals(year2)){
 						for(int j = 0; j < yearNode.getChildCount(); j++){
 							TreeItem monthNode =  yearNode.getChild(j);
 							//If this is not a dummy element
-							if(monthNode.getWidget() != null){
-							HorizontalPanel container2 = (HorizontalPanel) monthNode.getWidget();
-							CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
+							if(IfNodeIsNotDummy(monthNode)){
+		
 							String monthName = MyTreeViewItem.getMonthName(Integer.parseInt(month2));
-								if(checkBox2.getText().equals(monthName)){
+								if(getCheckBoxValueFromTreeItem(monthNode).equals(monthName)){
 									MyTreeViewItem newNode  = new MyTreeViewItem(element, resolution, this, monthNode, isChecked);
 									//Dummy Element
 									newNode.getTreeItem().addItem(new TreeItem());
@@ -130,23 +122,17 @@ public class MyTreeViewModel {
 				
 				for(int i = 0; i < root.getChildCount(); i++){
 					TreeItem yearNode =  root.getChild(i);
-					if(yearNode.getWidget() != null){
-					HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-					CheckBox checkBox = (CheckBox) container.getWidget(0);
-					if(checkBox.getText().equals(year3)){
+					if(IfNodeIsNotDummy(yearNode)){
+					  if(getCheckBoxValueFromTreeItem(yearNode).equals(year3)){
 						for(int j = 0; j < yearNode.getChildCount(); j++){
 							TreeItem monthNode =  yearNode.getChild(j);
-							if(monthNode.getWidget() != null){
-							HorizontalPanel container2 = (HorizontalPanel) monthNode.getWidget();
-							CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
+							if(IfNodeIsNotDummy(monthNode)){
 							String monthName = MyTreeViewItem.getMonthName(Integer.parseInt(month3));
-							if(checkBox2.getText().equals(monthName)){
+							  if(getCheckBoxValueFromTreeItem(monthNode).equals(monthName)){
 								for(int k = 0; k < monthNode.getChildCount(); k++){
 									TreeItem dayNode =  monthNode.getChild(k);
-									if(dayNode.getWidget() != null){
-									HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
-									CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
-										if(checkBox3.getText().equals(day)){
+									if(IfNodeIsNotDummy(dayNode)){
+										if(getCheckBoxValueFromTreeItem(dayNode).equals(day)){
 											dayNode.addItem(new MyTreeViewItem(element, resolution, this, dayNode, isChecked));
 											break;
 										}
@@ -172,10 +158,8 @@ public class MyTreeViewModel {
 		case Year:
 			for(int i = 0; i < root.getChildCount(); i++){
 				TreeItem yearNode =  root.getChild(i);
-					if(yearNode.getWidget() != null){
-					HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-					CheckBox checkBox = (CheckBox) container.getWidget(0);
-					if(checkBox.getText().equals(value)){
+					if(IfNodeIsNotDummy(yearNode)){
+					    if(getCheckBoxValueFromTreeItem(yearNode).equals(value)){
 						return yearNode;
 					}
 			  }
@@ -187,17 +171,13 @@ public class MyTreeViewModel {
 			String month = monthSplit[1];
 			for(int i = 0; i < root.getChildCount(); i++){
 				TreeItem yearNode =  root.getChild(i);
-				if(yearNode.getWidget() != null){
-					HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-					CheckBox checkBox = (CheckBox) container.getWidget(0);
-					if(checkBox.getText().equals(year)){
+				if(IfNodeIsNotDummy(yearNode)){
+					if(getCheckBoxValueFromTreeItem(yearNode).equals(year)){
 						for(int j = 0; j < yearNode.getChildCount(); j++){
 						TreeItem monthNode =  yearNode.getChild(j);
-						if(monthNode.getWidget() != null){
-							HorizontalPanel container2 = (HorizontalPanel) monthNode.getWidget();
-							CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
+						if(IfNodeIsNotDummy(monthNode)){
 							String monthName = MyTreeViewItem.getMonthName(Integer.parseInt(month));
-							if(checkBox2.getText().equals(monthName)){
+							if(getCheckBoxValueFromTreeItem(monthNode).equals(monthName)){
 								return monthNode;
 							}
 						}
@@ -215,23 +195,17 @@ public class MyTreeViewModel {
 				
 			for(int i = 0; i < root.getChildCount(); i++){
 				TreeItem yearNode =  root.getChild(i);
-				if(yearNode.getWidget() != null){
-				HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-				CheckBox checkBox = (CheckBox) container.getWidget(0);
-				if(checkBox.getText().equals(year2)){
+				if(IfNodeIsNotDummy(yearNode)){
+				if(getCheckBoxValueFromTreeItem(yearNode).equals(year2)){
 					for(int j = 0; j < yearNode.getChildCount(); j++){
 					TreeItem monthNode =  yearNode.getChild(j);
-					   if(monthNode.getWidget() != null){
-							HorizontalPanel container2 = (HorizontalPanel) monthNode.getWidget();
-							CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
+					   if(IfNodeIsNotDummy(monthNode)){
 							String monthName = MyTreeViewItem.getMonthName(Integer.parseInt(month2));
-							if(checkBox2.getText().equals(monthName)){
+							if(getCheckBoxValueFromTreeItem(monthNode).equals(monthName)){
 								for(int k = 0; k < monthNode.getChildCount(); k++){
 									TreeItem dayNode =  monthNode.getChild(k);
-									if(dayNode.getWidget() != null){
-										HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
-										CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
-										if(checkBox3.getText().equals(day2)){
+									if(IfNodeIsNotDummy(dayNode)){
+										if(getCheckBoxValueFromTreeItem(dayNode).equals(day2)){
 											return dayNode;
 										}
 									}
@@ -260,29 +234,21 @@ public class MyTreeViewModel {
 				
 				for(int i = 0; i < root.getChildCount(); i++){
 					TreeItem yearNode =  root.getChild(i);
-					if(yearNode.getWidget() != null){
-					HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-					CheckBox checkBox = (CheckBox) container.getWidget(0);
-					if(checkBox.getText().equals(year3)){
+					if(IfNodeIsNotDummy(yearNode)){
+					if(getCheckBoxValueFromTreeItem(yearNode).equals(year3)){
 						for(int j = 0; j < yearNode.getChildCount(); j++){
 						TreeItem monthNode =  yearNode.getChild(j);
-						if(monthNode.getWidget() != null){
-						HorizontalPanel container2 = (HorizontalPanel) monthNode.getWidget();
-						CheckBox checkBox2 = (CheckBox) container2.getWidget(0);	
+						if(IfNodeIsNotDummy(monthNode)){	
 						String monthName = MyTreeViewItem.getMonthName(Integer.parseInt(month3));
-							if(checkBox2.getText().equals(monthName)){
+							if(getCheckBoxValueFromTreeItem(monthNode).equals(monthName)){
 								for(int k = 0; k < monthNode.getChildCount(); k++){
 									TreeItem dayNode =  monthNode.getChild(k);
-										if(dayNode.getWidget() != null){
-										HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
-										CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
-										if(checkBox3.getText().equals(day)){
+										if(IfNodeIsNotDummy(dayNode)){
+										if(getCheckBoxValueFromTreeItem(dayNode).equals(day)){
 											for(int l = 0; l < dayNode.getChildCount(); l++){
 												TreeItem hourNode =  dayNode.getChild(l);
-												if(hourNode.getWidget() != null){
-												HorizontalPanel container4 = (HorizontalPanel) hourNode.getWidget();
-												CheckBox checkBox4 = (CheckBox) container4.getWidget(0);
-												if(checkBox4.getText().equals(hour)){
+												if(IfNodeIsNotDummy(hourNode)){
+												   if(getCheckBoxValueFromTreeItem(hourNode).equals(hour)){
 													return hourNode;
 												}
 											 }
@@ -304,18 +270,14 @@ public class MyTreeViewModel {
 	}
 	
 	public TreeItem findByValue(String value, DateResolution resolution){
-	
-			
+		
 		switch(resolution){
 		case Year:
 			for(int i = 0; i < root.getChildCount(); i++){
 				TreeItem yearNode =  root.getChild(i);
-					if(yearNode.getWidget() != null){
-					HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-					CheckBox checkBox = (CheckBox) container.getWidget(0);
-					System.out.println(" value 1" + checkBox.getText() + "value2" + value);
-					if(checkBox.getText().equals(value)){
-						return yearNode;
+					if(IfNodeIsNotDummy(yearNode)){
+					  if(getCheckBoxValueFromTreeItem(yearNode).equals(value)){
+						  return yearNode;
 					}
 				}
 			}
@@ -326,19 +288,15 @@ public class MyTreeViewModel {
 			String month = monthSplit[1];
 			for(int i = 0; i < root.getChildCount(); i++){
 				TreeItem yearNode =  root.getChild(i);
-				if(yearNode.getWidget() != null){
-				HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-				CheckBox checkBox = (CheckBox) container.getWidget(0);
-				if(checkBox.getText().equals(year)){
+				if(IfNodeIsNotDummy(yearNode)){
+				  if(getCheckBoxValueFromTreeItem(yearNode).equals(year)){
 					for(int j = 0; j < yearNode.getChildCount(); j++){
 					TreeItem monthNode =  yearNode.getChild(j);
-					if(monthNode.getWidget() != null){
-						HorizontalPanel container2 = (HorizontalPanel) monthNode.getWidget();
-						CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
+					if(IfNodeIsNotDummy(monthNode)){
 						String monthName = MyTreeViewItem.getMonthName(Integer.parseInt(month));
-						if(checkBox2.getText().equals(monthName)){
-							return monthNode;
-						}
+							if(getCheckBoxValueFromTreeItem(monthNode).equals(monthName)){
+								return monthNode;
+							}
 				  }
 				}
 				}
@@ -354,25 +312,19 @@ public class MyTreeViewModel {
 				
 			for(int i = 0; i < root.getChildCount(); i++){
 				TreeItem yearNode =  root.getChild(i);
-				if(yearNode.getWidget() != null){
-				HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-				CheckBox checkBox = (CheckBox) container.getWidget(0);
-				if(checkBox.getText().equals(year2)){
+				if(IfNodeIsNotDummy(yearNode)){
+				 if(getCheckBoxValueFromTreeItem(yearNode).equals(year2)){
 					for(int j = 0; j < yearNode.getChildCount(); j++){
 					TreeItem monthNode =  yearNode.getChild(j);
-					if(monthNode.getWidget() != null){
-						HorizontalPanel container2 = (HorizontalPanel) monthNode.getWidget();
-						CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
+					if(IfNodeIsNotDummy(monthNode)){
 						String monthName = MyTreeViewItem.getMonthName(Integer.parseInt(month2));
-						if(checkBox2.getText().equals(monthName)){
+						if(getCheckBoxValueFromTreeItem(monthNode).equals(monthName)){
 							for(int k = 0; k < monthNode.getChildCount(); k++){
 								TreeItem dayNode =  monthNode.getChild(k);
-								if(dayNode.getWidget() != null){
-								HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
-								CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
-								if(checkBox3.getText().equals(day2)){
-									return dayNode;
-								}
+								if(IfNodeIsNotDummy(dayNode)){
+									if(getCheckBoxValueFromTreeItem(dayNode).equals(day2)){
+										return dayNode;
+									}
 						 }
 					}
 				  }
@@ -397,31 +349,23 @@ public class MyTreeViewModel {
 				
 				for(int i = 0; i < root.getChildCount(); i++){
 					TreeItem yearNode =  root.getChild(i);
-					if(yearNode.getWidget() != null){
-					HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-					CheckBox checkBox = (CheckBox) container.getWidget(0);
-					if(checkBox.getText().equals(year3)){
+					if(IfNodeIsNotDummy(yearNode)){
+					 if(getCheckBoxValueFromTreeItem(yearNode).equals(year3)){
 						for(int j = 0; j < yearNode.getChildCount(); j++){
 						TreeItem monthNode =  yearNode.getChild(j);
-						if(monthNode.getWidget() != null){
-						HorizontalPanel container2 = (HorizontalPanel) monthNode.getWidget();
-						CheckBox checkBox2 = (CheckBox) container2.getWidget(0);
+						if(IfNodeIsNotDummy(monthNode)){
 						String monthName = MyTreeViewItem.getMonthName(Integer.parseInt(month3));
-						if(checkBox2.getText().equals(monthName)){
+						if(getCheckBoxValueFromTreeItem(monthNode).equals(monthName)){
 							for(int k = 0; k < monthNode.getChildCount(); k++){
 								TreeItem dayNode =  monthNode.getChild(k);
-								if(dayNode.getWidget() != null){
-									HorizontalPanel container3 = (HorizontalPanel) dayNode.getWidget();
-									CheckBox checkBox3 = (CheckBox) container3.getWidget(0);
-									if(checkBox3.getText().equals(day)){
+								if(IfNodeIsNotDummy(dayNode)){
+									if(getCheckBoxValueFromTreeItem(dayNode).equals(day)){
 										for(int l = 0; l < dayNode.getChildCount(); l++){
 											TreeItem hourNode =  dayNode.getChild(l);
-											if(hourNode.getWidget() != null){
-											HorizontalPanel container4 = (HorizontalPanel) hourNode.getWidget();
-											CheckBox checkBox4 = (CheckBox) container4.getWidget(0);
-											if(checkBox4.getText().equals(hour)){
-												return hourNode;
-											}
+											if(IfNodeIsNotDummy(hourNode)){
+												if(getCheckBoxValueFromTreeItem(hourNode).equals(hour)){
+													return hourNode;
+												}
 										}
 									}
 							}
@@ -442,6 +386,21 @@ public class MyTreeViewModel {
 	
 	public TreeItem getRoot(){
 		return root;
+		
+	}
+	
+	private String getCheckBoxValueFromTreeItem(TreeItem node){
+		
+		HorizontalPanel container = (HorizontalPanel) node.getWidget();
+		CheckBox checkBox = (CheckBox) container.getWidget(0);
+		
+		return checkBox.getText();
+	}
+	
+	
+	private boolean IfNodeIsNotDummy(TreeItem item){
+		
+		return item.getWidget() != null;
 		
 	}
 

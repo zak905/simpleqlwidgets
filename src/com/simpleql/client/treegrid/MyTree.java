@@ -44,8 +44,6 @@ public class MyTree extends DateRangeSelector {
 			public void onOpen(OpenEvent<TreeItem> event) {
 				
 				TreeItem currentItem = event.getTarget();
-				//currentItem.
-
 				
 				if(!currentItem.equals(model.getRoot())){
 					HorizontalPanel container = (HorizontalPanel) currentItem.getWidget();
@@ -132,151 +130,17 @@ public class MyTree extends DateRangeSelector {
     
 	@Override
 	public DateRangeElement[] getSelectedDates() {
-		List<DateRangeElement> list = new ArrayList<DateRangeElement>();
-		
-				/*for(int i = 0; i < model.getRoot().getChildCount(); i++){
-					TreeItem yearNode = model.getRoot().getChild(i);
-					//if not dummy element
-					if(yearNode.getWidget() != null){
-						HorizontalPanel container = (HorizontalPanel) yearNode.getWidget();
-						CheckBox checkBox = (CheckBox) container.getWidget(0);
-						if(checkBox.getValue()){
-							String year = yearNode.getElement().getId();
-							DateRangeElement rangeElement = new DateRangeElement(DateResolution.Year, year, year);
-							
-							DateRangeElement[] selectedMonths = getSelectedDatesForMonths(yearNode);
-							List<DateRangeElement> monthsAsList = Arrays.asList(selectedMonths);
-							
-							
-							
-							if(monthsAsList.size() > 0 && monthsAsList.size() < yearNode.getChildCount()){
-								List<DateRangeElement> mergedSelection = MergeSubRanges(yearNode);
-							   list.addAll(mergedSelection);
-							  // System.out.println("case 1");
-							}else if(monthsAsList.size() == model.getRoot().getChildCount()){
-								List<DateRangeElement> mergedSelection = MergeSubRanges(model.getRoot());
-								   list.addAll(mergedSelection);
-								   //System.out.println("case 2");
-							}else{
-								List<DateRangeElement> mergedSelection = MergeSubRanges(model.getRoot());
-								  list.addAll(mergedSelection);
-								//list.addAll(monthsAsList);
-								//System.out.println("case 3");
-							}
-							 	
-						}
-						
-						
-					}
-				}*/
-				
-	       
-			List<DateRangeElement> mergedSelection = MergeSubRanges(model.getRoot());
+		List<DateRangeElement> mergedSelection = MergeSubRanges(model.getRoot());
 		return mergedSelection.toArray(new DateRangeElement[mergedSelection.size()]);
 	}
 	
-	public DateRangeElement[] getSelectedDatesForMonths(TreeItem subTreeRoot) {
-		List<DateRangeElement> list = new ArrayList<DateRangeElement>();
-
-		
-		
-				for(int i = 0; i < subTreeRoot.getChildCount(); i++){
-					TreeItem montNode = subTreeRoot.getChild(i);
-					
-					//if not dummy element
-					if(montNode.getWidget() != null){
-						HorizontalPanel container = (HorizontalPanel) montNode.getWidget();
-						CheckBox checkBox = (CheckBox) container.getWidget(0);
-						if(checkBox.getValue()){
-							String month = montNode.getElement().getId();
-							
-							DateRangeElement rangeElement = new DateRangeElement(DateResolution.Month, month, month);
-							
-							
-							DateRangeElement[] selectedDays = getSelectedDatesForDays(montNode);
-							List<DateRangeElement> daysAsList = Arrays.asList(selectedDays);
-							if(daysAsList.size() > 0 && daysAsList.size() < montNode.getChildCount()){
-								List<DateRangeElement> mergedSelection = MergeSubRanges(montNode);
-							    list.addAll(mergedSelection);
-							}else{
-								list.add(rangeElement);
-							}
-							
-						}
-						
-						
-						
-					}
-				}
-				
-
-		return list.toArray(new DateRangeElement[list.size()]);
-	}
-	
-	public DateRangeElement[] getSelectedDatesForDays(TreeItem subTreeRoot) {
-		List<DateRangeElement> list = new ArrayList<DateRangeElement>();
-
-		
-		for(int i = 0; i < subTreeRoot.getChildCount(); i++){
-			TreeItem dayNode = subTreeRoot.getChild(i);
-			//if not dummy element
-			if(dayNode.getWidget() != null){
-				HorizontalPanel container = (HorizontalPanel) dayNode.getWidget();
-				CheckBox checkBox = (CheckBox) container.getWidget(0);
-				if(checkBox.getValue()){
-					String dayResolution = dayNode.getElement().getId();
-					
-					DateRangeElement rangeElement = new DateRangeElement(DateResolution.Day, dayResolution, dayResolution);
-					DateRangeElement[] selectedHours = getSelectedDatesForHours(dayNode);
-					List<DateRangeElement> hoursAsList = Arrays.asList(selectedHours);
-					if(hoursAsList.size() > 0 && hoursAsList.size() < dayNode.getChildCount()){
-					List<DateRangeElement> mergedSelection = MergeSubRanges(dayNode);
-					  list.addAll(mergedSelection);
-					}else{
-					  list.add(rangeElement);
-					}
-					
-				}
-				
-				
-			}
-		}
-		
-		
-		
-		return list.toArray(new DateRangeElement[list.size()]);
-	}
-	
-	public DateRangeElement[] getSelectedDatesForHours(TreeItem subTreeRoot) {
-		List<DateRangeElement> list = new ArrayList<DateRangeElement>();
-		
-		
-				for(int i = 0; i < subTreeRoot.getChildCount(); i++){
-					TreeItem node = subTreeRoot.getChild(i);
-					//if not dummy element
-					if(node.getWidget() != null){
-						HorizontalPanel container = (HorizontalPanel) node.getWidget();
-						CheckBox checkBox = (CheckBox) container.getWidget(0);
-						if(checkBox.getValue()){
-							String hourResolution = node.getElement().getId();
-							DateRangeElement rangeElement = new DateRangeElement(DateResolution.Hour, hourResolution, hourResolution);
-							list.add(rangeElement);
-							
-						}
-					}
-				}
-				
-				
-
-		return list.toArray(new DateRangeElement[list.size()]);
-	}
 	
 	
 	private List<DateRangeElement> MergeSubRanges(TreeItem subTreeRoot){
-		int subrangeCount = 0;
 		List<DateRangeElement> currentRange = new ArrayList<DateRangeElement>();
 		List<DateRangeElement> range = new ArrayList<DateRangeElement>();
 		 List<DateRangeElement> childRanges = new ArrayList<DateRangeElement>();
+		 boolean resultOfSubTreeUsingAnd = true;
 		
 		for(int i = 0; i < subTreeRoot.getChildCount(); i++){
 			TreeItem child = subTreeRoot.getChild(i);
@@ -290,7 +154,7 @@ public class MyTree extends DateRangeSelector {
 				String checkBoxClass = checkBox.getElement().getClassName();
 			    String[] split = checkBoxClass.split(" ");
 			    String resolutionClass = split[1];
-
+			    resultOfSubTreeUsingAnd = resultOfSubTreeUsingAnd && checkBox.getValue();
 			    DateResolution resolution;
 			    if(resolutionClass.equals("year")){
 			    	resolution = DateResolution.Year;
@@ -304,21 +168,17 @@ public class MyTree extends DateRangeSelector {
 				
 				
 			   childRanges = MergeSubRanges(child);
-			   //System.out.println("children count" + subTreeRoot.getChildCount() + " current Range " + currentRange.size());
-				range.addAll(childRanges);
-				
-				
+
+				  range.addAll(childRanges);
+				  
 				if(checkBox.getValue()){
-					 
-					
 					String value = child.getElement().getId();
 					DateRangeElement rangeElement = new DateRangeElement(resolution, value, value);
 					
-					subrangeCount++;
 					
 					
+					if(childRanges.size() == 0)
 					   currentRange.add(rangeElement);
-					
 				}else{
 					
 						if(currentRange.size() > 0){
@@ -330,7 +190,7 @@ public class MyTree extends DateRangeSelector {
 						
 						
 				    }
-					subrangeCount = 0;
+					
 					currentRange.clear();
 				}
 				
@@ -339,19 +199,13 @@ public class MyTree extends DateRangeSelector {
 		}
 		
 		//One last check after exiting the loop
-	
-	 if(!currentRange.isEmpty()){
-		
-				
-		 if(currentRange.size() > 0){
-			//System.out.println("first case" + currentRange.size() + " " + subTreeRoot.getChildCount());
-		
-			
+	 
+		 if(currentRange.size() > 0){			
 			DateRangeElement firstElement = currentRange.get(0);
 			DateRangeElement lastElement = currentRange.get(currentRange.size() - 1);
-			//System.out.println("from " + firstElement.getFrom() + "to " + lastElement.getTo());
 			DateRangeElement rangeElement = new DateRangeElement(firstElement.getType(), firstElement.getFrom(), lastElement.getTo());
-			/*if(currentRange.size()  == subTreeRoot.getChildCount() - 1){
+			
+			if(currentRange.size()  == subTreeRoot.getChildCount() - 1){
 				 DateResolution resolutionForFather;
 				    if(firstElement.getType() == DateResolution.Month){
 				    	resolutionForFather = DateResolution.Year;
@@ -360,22 +214,19 @@ public class MyTree extends DateRangeSelector {
 				    }else if (firstElement.getType() == DateResolution.Hour){
 				    	resolutionForFather = DateResolution.Day;
 				    } else{
-				    	range.clear();
-				    	range.add(rangeElement);
-				    	System.out.println("last case");
+				    	resolutionForFather = DateResolution.Year;
+				    	 range.add(rangeElement);
 				    	return range;
 				    }
 				    
 				DateRangeElement parentElement = new DateRangeElement(resolutionForFather, subTreeRoot.getElement().getId(), subTreeRoot.getElement().getId());
-				range.clear();
 				range.add(parentElement);
-			}else{*/
-			   range.add(rangeElement);
-			  // range.addAll(childRanges);
-			//}
+			}else{
+			    range.add(rangeElement);
+			}
 			
 		 }
-	 }
+	 
 	
 		return range;
 		
@@ -386,5 +237,7 @@ public class MyTree extends DateRangeSelector {
 	public Widget asWidget(){
 		return tree;
 	}
+	
+	
 
 }
